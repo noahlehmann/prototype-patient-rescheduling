@@ -1,0 +1,70 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: nodemaintenancewindows.de.iisys.ki-awz
+spec:
+  group: de.iisys.ki-awz
+  names:
+    kind: NodeMaintenanceWindow
+    plural: nodemaintenancewindows
+    singular: nodemaintenancewindow
+    shortNames:
+      - nm
+  scope: Cluster
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required: ["spec"]
+          properties:
+            spec:
+              type: object
+              required: ["nodeName", "start", "end"]
+              properties:
+                nodeName:
+                  type: string
+                  description: "Name of the node under maintenance"
+                start:
+                  type: string
+                  format: date-time
+                  description: "Start time of the maintenance window (RFC 3339). This time is used to drain the node if `drainBy` is not set"
+                end:
+                  type: string
+                  format: date-time
+                  description: "End time of the maintenance window (RFC 3339)"
+                drainBy:
+                  type: string
+                  format: date-time
+                  description: "Time by which eviction needs to start to start maintenance after (RFC 3339)"
+                reason:
+                  type: string
+                  description: "Optional reason for maintenance"
+            status:
+              type: object
+              properties:
+                lastUpdated:
+                  type: string
+                  format: date-time
+      additionalPrinterColumns:
+        - jsonPath: .spec.nodeName
+          name: Node
+          type: string
+        - jsonPath: .spec.start
+          name: Start
+          type: date
+          format: date-time
+        - jsonPath: .spec.drainBy
+          name: Drain Node By
+          type: date
+          format: date-time
+        - jsonPath: .spec.end
+          name: End
+          type: date
+          format: date-time
+        - jsonPath: .spec.reason
+          name: Reason
+          type: string
+

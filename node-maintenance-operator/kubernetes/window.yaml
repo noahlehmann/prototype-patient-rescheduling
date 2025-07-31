@@ -1,0 +1,10 @@
+apiVersion: de.iisys.ki-awz/v1alpha1
+kind: NodeMaintenanceWindow
+metadata:
+  name: maintenance-node1-20250724
+spec:
+  nodeName: kube-3
+  start: "2025-07-25T01:00:00Z"
+  drainBy: "2025-07-25T01:30:00Z"
+  end: "2025-07-31T02:00:00Z"
+  reason: "Kernel upgrade"
